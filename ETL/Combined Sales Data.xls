@@ -26,8 +26,8 @@ ETL Process:
 As all the column names are identical across the files hence created 3 lists for only the required columns:
            
 ___________________________________________________________________________________________________________________________________________________________________________________________________________
-| List name           Purpose                                                        Query                                                                                                                |
-| ============================================|===========================================================================================================================================================|        
+| List name               Purpose                                                        Query                                                                                                            |
+|_________________________________________________________________________________________________________________________________________________________________________________________________________|        
 | 1.ALL Columns      Existing Columns Names   |    = {"Sales_Date" ,"Delivery_Date","SKU_Code","Qty","Unit_Price","Line_Amount","From_Location","To_Location","Channel","Sub_Channel","Delivery_Type",    |
 |                                             |   "Courier","City_Tier","Category","Order_ID","Customer_ID","Payment_Method","Is_Returned"}                                                               |
 |                                             |                                                                                                                                                           |
@@ -48,6 +48,89 @@ ________________________________________________________________________________
 |                                             |         {"Sub-Channel",type text},{"Delivery_Type",type text},{"Courier",type text},{"City_Tier",type text},{"Category",type text},                       |
 |                                             |         {"Order_ID",type text},{"Customer_ID",type text},{"Payment_Method",type text},{"Is_Returned",Int64.Type}}                                         |
 |_____________________________________________|___________________________________________________________________________________________________________________________________________________________|
-Dcart(Subfolder):
 
-1. 
+Dcart(Subfolder):
+====================================================================================================================
+Source Files:
+
+DCart_Sales_2025-01.xlsx
+DCart_Sales_2025-02.xlsx
+DCart_Sales_2025-03.xlsx
+DCart_Sales_2025-04.xlsx
+DCart_Sales_2025-05.xlsx
+DCart_Sales_2025-06.xlsx
+DCart_Sales_2025-07.xlsx
+======================================================================================================================
+ --Converted Binary to Excel workbook, promoted first row as headers, kept only the Content column consisting Tables
+ --Removed unwanted column and renamed them
+======================================================================================================================
+Query:
+1. let
+    Source = Folder.Files("C:\Users\Dyuti Mazumder\Downloads\Data Cleaning (Chandeep)\Case Data\Sales Data\DCart"),
+    Custom1 = Table.SelectColumns( Table.TransformColumns(Source,{"Content", each Excel.Workbook(_,true)}),"Content"), //Converted Binary to Excel workbook, promoted first row as headers, kept only the Content column consisting Tables
+    #"Expanded Content" = Table.ExpandTableColumn(Custom1, "Content", {"Name", "Data", "Item", "Kind", "Hidden"}, {"Name", "Data", "Item", "Kind", "Hidden"}), //Expanded Tables
+    Data = Table.RenameColumns ( Table.SelectColumns(Table.Combine( #"Expanded Content"[Data]),#"ALL Columns"),RenameMapping) //Removed unwanted column and renamed them
+in
+    Data
+
+D2C (Subfolder):
+======================================================================================================================
+Source Files: 
+
+sales_D2C_2025-01.csv
+sales_D2C_2025-02.csv
+sales_D2C_2025-03.csv
+sales_D2C_2025-04.csv
+sales_D2C_2025-05.csv
+sales_D2C_2025-06.csv
+sales_D2C_2025-07.csv
+======================================================================================================================
+--Converted table into list for making the headers and columns dynamic, kept only required columns and  renamed columns
+--Changed datatype as per "Datatypes" list
+--Removed rows with error from all columns
+======================================================================================================================
+Query:
+
+let
+    Source = Folder.Files("C:\Users\Dyuti Mazumder\Downloads\Data Cleaning (Chandeep)\Case Data\Sales Data\D2C"),
+    Custom1 = Table.SelectColumns( Table.AddColumn(Source, "Custom", each Csv.Document([Content])),"Custom"),// Added custom column Converted Binary to Table
+
+    #"Combine n expand" = Table.RenameColumns( Table.SelectColumns( Table.PromoteHeaders(Table.Combine(Custom1[Custom]),[PromoteAllScalars=true]),#"ALL Columns"),RenameMapping), 
+// Convert table into list for making the headers and columns dynamic, kept only required columns and  renamed columns
+
+    #"Changed Type" = Table.TransformColumnTypes(#"Combine n expand",DataTypes),// Changed datatype as per "Datatypes" list
+    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Changed Type",#"AllNew Columns")// Removed columns with error from all columns
+in
+    #"Removed Errors"
+
+
+Source File: Nile_Sales_YTD.xlsx
+
+Sheets:
+Nile_Sales_2025-07
+Nile_Sales_2025-06
+Nile_Sales_2025-05
+Nile_Sales_2025-04
+Nile_Sales_2025-03
+Nile_Sales_2025-02
+Nile_Sales_2025-01
+_xlnm._FilterDatabase
+
+====================================================================================================================
+--Filtered unwanted sheet : _xlnm._FilterDatabase
+--Made the headers and columns dynamic to update automatically when new data is loaded.
+--Renamed Columns as AllNew Columns list
+--Changed column type as per datatype mapping list
+====================================================================================================================
+Query:
+
+let
+    Source = Excel.Workbook(File.Contents("C:\Users\Dyuti Mazumder\Downloads\Data Cleaning (Chandeep)\Case Data\Sales Data\Nile_Sales_YTD.xlsx"), null, true),
+    #"Filtered Rows" = Table.SelectRows(Source, each ([Name] <> "_xlnm._FilterDatabase")),
+    Data = Table.RemoveRowsWithErrors( Table.TransformColumnTypes(Table.RenameColumns( Table.PromoteHeaders( Table.Combine( #"Filtered Rows"[Data]),[PromoteAllScalars=true]),RenameMapping),DataTypes),#"AllNew Columns")
+in
+    Data
+
+Combined Sales Data: New query
+======================================================================================================================
+= Table.TransformColumnTypes( Table.Combine({DCart, D2C, #"Nile_Sales_2025-01"}),DataTypes) // Combined all file data after ETL
