@@ -1,0 +1,50 @@
+PRODUCT & COST DETAILS
+
+File: Product and Cost Details.xlsx
+
+Sheet: Cost Structure
+======================================================================================================================
+ETL Process:
+1.Removing top Junk Rows from Cost Structure Sheet
+
+2.Promoting required headers dynamically
+
+3.Transforming the table with multiple SKU_Code as headers into an unpivoted table with columns
+("Agreement Code", "Start Date" , "End Date", "SKU_Code" and "Cost") for better analysis.
+
+4.Validated uniqueness of SKU-Code 
+========================================================================================================================
+Query:
+
+let
+    Source = Excel.Workbook(File.Contents("C:\Users\Dyuti Mazumder\Downloads\Data Cleaning (Chandeep)\Case Data\Additional Information\New folder\Product and Cost Details.xlsx"), null, true),
+    #"Cost Structure_Sheet" = Source{[Item="Cost Structure",Kind="Sheet"]}[Data],
+    Custom1 = 
+    Table.TransformColumns( 
+     Table.TransformColumnTypes ( 
+      Table.UnpivotOtherColumns( 
+        Table.PromoteHeaders( 
+          Table.Skip(#"Cost Structure_Sheet",each not 
+            List.ContainsAny(
+              Record.ToList(_),{"Agreement Code"}
+                              ))),{"Agreement Code", "Start_Date", "End_Date"},"SKU_Code", "Cost"),
+                              {{"Agreement Code",type text}, {"Start_Date",type date} , 
+                              {"End_Date",type date} ,{"Cost",type number}}),
+                              {{"Cost", each Number.Round(_, 2), type number}}) // Removed Junk Row for dynamically choosing headers using list feature of Power Query
+in
+    Custom1
+
+
+Sheet: Product Details
+================================================================================================================================
+1. Validated uniqueness of SKU-Code and check for duplicates
+2. Promoted headers and updated column data types
+================================================================================================================================
+Query:
+let
+    Source = Excel.Workbook(File.Contents("C:\Users\Dyuti Mazumder\Downloads\Data Cleaning (Chandeep)\Case Data\Additional Information\New folder\Product and Cost Details.xlsx"), null, true),
+    #"Product List_Sheet" = Source{[Item="Product List",Kind="Sheet"]}[Data],
+    #"Promoted Headers" = Table.PromoteHeaders(#"Product List_Sheet", [PromoteAllScalars=true]),
+    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"SKU_Code", type text}, {"Product_Name", type text}, {"Category", type text}, {"Pack_Size", type text}, {"MRP", Int64.Type}, {"Ship_Length_cm", Int64.Type}, {"Ship_Width_cm", Int64.Type}, {"Ship_Height_cm", Int64.Type}})
+in
+    #"Changed Type"
