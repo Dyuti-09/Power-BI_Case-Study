@@ -1,0 +1,53 @@
+# Combined Sales Data
+__________________________
+
+The file contains the transformed and combined data from the sources:
+Sales Data Folder:
+        a. Dcart(Subfolder) : 7 Excel files of Sales Data
+        b. D2C(Subfolder)   : 7 Csv files of Sales Data with 2 Sheets each as per Sub - channels
+                         : 1  Excel file of Nile Sales Data with 7 sheets as per Months
+
+ETL Process: 
+==================================================================================================
+1. Importing data from multiple Folders
+
+2. Transforming Binary into Sheet and From Sheet to Table
+
+3. Create Query (List) for Column Transformation 
+
+4. Promote headers, Keep Required columns, Rename Columns, Change Data Types
+
+5.Combining tables from different files and sheets
+
+6. Validating Data Completeness and Quality
+
+(ETL Steps)
+=============================================================================================
+As all the column names are identical across the files hence created 3 lists for only the required columns:
+           
+___________________________________________________________________________________________________________________________________________________________________________________________________________
+| List name           Purpose                                                        Query                                                                                                                |
+| ============================================|===========================================================================================================================================================|        
+| 1.ALL Columns      Existing Columns Names   |    = {"Sales_Date" ,"Delivery_Date","SKU_Code","Qty","Unit_Price","Line_Amount","From_Location","To_Location","Channel","Sub_Channel","Delivery_Type",    |
+|                                             |   "Courier","City_Tier","Category","Order_ID","Customer_ID","Payment_Method","Is_Returned"}                                                               |
+|                                             |                                                                                                                                                           |
+|_____________________________________________|___________________________________________________________________________________________________________________________________________________________|
+|                                             |                                                                                                                                                           |                                                                                                                                                                                                    
+| 2.AllNew Columns   Renamed Columns          | = {"Sales Date","Delivery Date","SKU_Code", "Quantity","Unit Price","Sales Amount","From_Location","To_Location","Channel","Sub-Channel","Delivery_Type", |
+|                                             | "Courier","City_Tier","Category","Order_ID","Customer_ID","Payment_Method","Is_Returned"}                                                                 |
+|                                             |                                                                                                                                                           |
+|_____________________________________________|___________________________________________________________________________________________________________________________________________________________|
+|                                             |                                                                                                                                                           |
+| 3.RenameMapping   Created list for          |  =  List.Zip({#"ALL Columns",#"AllNew Columns"})                                                                                                          |
+|                   mapping renamed columns   |                                                                                                                                                           |
+|                                             |                                                                                                                                                           |
+|_____________________________________________|___________________________________________________________________________________________________________________________________________________________|
+|                                             |                                                                                                                                                           |
+| 4.DataTypes       Determining Data Types    |  =    {{"Sales Date",  type date},{"Delivery Date",  type date},{"SKU_Code", type text},{"Quantity", Int64.Type},{"Unit Price",Int64.Type},               |
+|                                             |         {"Sales Amount",Int64.Type},{"From_Location",type text},{"To_Location",type text},{"Channel",type text},                                          |
+|                                             |         {"Sub-Channel",type text},{"Delivery_Type",type text},{"Courier",type text},{"City_Tier",type text},{"Category",type text},                       |
+|                                             |         {"Order_ID",type text},{"Customer_ID",type text},{"Payment_Method",type text},{"Is_Returned",Int64.Type}}                                         |
+|_____________________________________________|___________________________________________________________________________________________________________________________________________________________|
+Dcart(Subfolder):
+
+1. 
