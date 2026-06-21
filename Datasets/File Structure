@@ -1,0 +1,14 @@
+The Dataset consists of 2 Folders in one Main Folder Case Study:
+1. Sales Data 
+2. Additional Information
+
+Sales Data Folder:
+        a. Dcart(Subfolder) : 7 Excel files of Sales Data
+        b. D2C(Subfolder)   : 7 Csv files of Sales Data with 2 Sheets each as per Sub - channels
+                         : 1  Excel file of Nile Sales Data with 7 sheets as per Months
+
+Additional Information Folder : 
+        a. Product and Cost Details : Excel File
+        b. Performance Marketing Ad Spends Budget : Excel File
+        c. Ad_Campaign_Data : Csv File
+      
