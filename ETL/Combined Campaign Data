@@ -1,0 +1,22 @@
+Combined Campaign Data
+__________________________
+
+The file contains the transformed and combined data from the sources:
+Folder: Additional Information
+      a: Performance Marketing Ad Spends Budget : 1 sheet : Category Wise Advertising Spends Budget
+      b: Ad_Campaign_Data :  1 Sheet of Ad_Campaign_Data
+
+ETL Process:
+=====================================================================
+1. Importing data from the files.
+
+2. Create Query (List) for Column Transformation respectively for Additional Information and Campaign Data
+
+3. Removed junk rows from Performance Marketing Ad Spends Budget , Unpivoted the columns for better analysis
+
+4. Extracted the category, product name and campaign name in the file of Additional information.
+
+5.Promote headers, Keep Required columns, Rename Columns, Change Data Types
+
+6. Validating Data Completeness and Quality.
+
