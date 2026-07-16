@@ -1,0 +1,41 @@
+
+Fact Tables : 
+1. Combined Sales Data
+2. Additional Information
+
+Dim Tables :
+
+1.Calendar
+2.Campaign : Contains unique Campaingn name
+3.Product_List : Unique SKU_COde
+4.Category: Category
+5.Medium: Unique medium of Campaign
+6.Platform: Unique platform of Campaign
+7.Cost_Structure: Unique Cost_SKU
+8.Sub_Channel :  Unique Sub_channel
+9.Agreement Code
+
+Bridge Tables:
+Category Table ( To prevent Many-to-many relationship) between Fact Tables and Dimension Tables(Product_List)
+
+Relationships Overview:
+____________________________
+
+
+Combined_Sales_Data_ (Channel)            *----<-----1           Channel (Channel)
+Combined_Sales_Data_ (Cost_SK)            *----<-----1           Cost_Structure (Cost_SK)
+Combined_Sales_Data_ (Sales Date)         *----<-----1           Calender (Date)
+Combined_Sales_Data_ (SKU_Code)           *----<-----1           Product_List (SKU_Code)
+Combined_Sales_Data_ (Sub-Channel)        *----<-----1           Sub_Channel (Sub-Channel)
+Cost_Structure (Agreement Code)           *----<-----1           Agreement Code (Agreement Code)
+Product_List (Category)                   *----<-----1           Category (Category)
+Product_List (Product_Name)               *----<-----1           Demo Prod Table (Product_Name)
+Additional_Information (Campaign Month)   *----<-----1           Calender (Date)
+Additional_Information (Campaign)         *----<-----1           Campaign (Campaign)
+Additional_Information (Category)         *----<-----1           Category (Category)
+Additional_Information (Medium)           *----<-----1           Medium (Medium)
+Additional_Information (Platform)         *----<-----1           Platform (Platform)
+Threshold (Month Start Date)              *----<-----1           Calender (Date)
+Threshold (SKU_Code)                      *----<-----1           Product_List (SKU_Code)
+
+
