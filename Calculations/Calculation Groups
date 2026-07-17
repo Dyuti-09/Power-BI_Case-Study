@@ -1,1 +1,26 @@
+Time Intelligence Calculation Group
 
+Current = SELECTEDMEASURE() // Values (Sales/ Cost/ Profit / Orders) for Current Month
+
+Previous Month = 
+CALCULATE(
+    SELECTEDMEASURE(),
+    DATEADD(Calender[Date],-1,MONTH)
+)
+
+MOM % = 
+ (SELECTEDMEASURE() - 
+CALCULATE(
+    SELECTEDMEASURE(),DATEADD(Calender[Date],-1,MONTH)
+ ))/CALCULATE(
+    SELECTEDMEASURE(),DATEADD(Calender[Date],-1,MONTH))
+
+Cumulative Amount = 
+TOTALYTD(
+    SELECTEDMEASURE(),
+    Calender[Date]
+)
+
+
+Gross Margin % = 
+([Total Sales]- [Cost Price])/[Total Sales]
