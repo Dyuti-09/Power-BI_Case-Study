@@ -1,13 +1,19 @@
 Time Intelligence Calculation Group
 
+Calculation Group 1:
+
+Calculation Item 1:
 Current = SELECTEDMEASURE() // Values (Sales/ Cost/ Profit / Orders) for Current Month
 
+
+Calculation Item 2:
 Previous Month = 
 CALCULATE(
     SELECTEDMEASURE(),
     DATEADD(Calender[Date],-1,MONTH)
 )
 
+Calculation Item 3:
 MOM % = 
  (SELECTEDMEASURE() - 
 CALCULATE(
@@ -15,20 +21,28 @@ CALCULATE(
  ))/CALCULATE(
     SELECTEDMEASURE(),DATEADD(Calender[Date],-1,MONTH))
 
+Calculation Item 4:
 Cumulative Amount = 
 TOTALYTD(
     SELECTEDMEASURE(),
     Calender[Date]
 )
 
-
+Calculation Item 5:
 Gross Margin % = 
 ([Total Sales]- [Cost Price])/[Total Sales]
 
 ________________________________________________________________________________________________________________________________________________________________________
 ========================================================================================================================================================================
+
+
+Calculation Group 2:
+
+Calculation Item 1:
 Value = SELECTEDMEASURE() // Values (Sales/ Cost/ Profit / Orders) for Selected Month
 
+
+Calculation Item 2:
 CM Vs. Monthly Sales Coparison = 
 VAR LatestDate = CALCULATE(MAX(Combined_Sales_Data_[Sales Date]),ALL(Combined_Sales_Data_))
 VAR LatestMOnth = MONTH(LatestDate)
