@@ -1,0 +1,54 @@
+Sales Performance _KPI
+
+CM Vs. Monthly Sales Comparison =  
+VAR LatestDate = CALCULATE(MAX(Combined_Sales_Data_[Sales Date]),ALL(Combined_Sales_Data_))
+VAR LatestMOnth = MONTH(LatestDate)
+Var LatestYear = Year(LatestDate)
+
+VAR LatestOrders = CALCULATE(
+   [Total Orders],
+   ALL(Calender),Calender[Month]= LatestMOnth,
+   Calender[Year]=LatestYear
+)
+VAR Varience = DIVIDE([Total Orders],LatestOrders)
+
+RETURN Varience // Comparing Latest month sales with the previous months sales to see performance growth as on date.
+
+_______________________________________________________________________________________________________________________________________________
+
+Profit = [Total Sales]-[Cost Price] ; 
+
+Profit Margin % = 
+([Total Sales]- [Cost Price])/[Total Sales]
+
+_______________________________________________________________________________________________________________________________________________
+
+Total Volume Discount = 
+VAR UnitSold = [Unit Sold]
+VAR ThresholdValue = 150
+VAR CostperUnit = [Cost/Unit]
+RETURN
+if(
+    UnitSold > ThresholdValue, 
+   CostperUnit*0.1,
+    BLANK()
+)
+ // Discount provided by vendors to business on cost of products on selling more than the set thresholds which is 150 as of now on a monthly basis.
+
+___________________________________________________________________________________________________________________________________________________
+
+Excess Amount = 
+VAR UnitSOld = [Unit Sold]
+VAR Discount = 0.1
+VAR ThresholdValue = 150
+RETURN
+if(
+    UnitSOld > ThresholdValue, 
+    UnitSOld-ThresholdValue
+)
+_____________________________________________________________________________________________________________________________________________________
+
+Net Payable = [Cost Price]- [Total Volume Discount]
+
+_______________________________________________________________________________________________________________________________________________________
+
