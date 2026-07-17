@@ -1,0 +1,55 @@
+Campaign_KPIs
+
+
+1. Add-To-Cart % = 
+DIVIDE(
+    SUM(Additional_Information[Add_to_Cart]),
+    SUM(Additional_Information[Clicks])
+) //  To understand how many attends were made intended to buy the products after showing interest.
+_________________________________________________________________________________________________________________________________________
+
+2. Cart Conversion Rate % = 
+DIVIDE(
+    DISTINCTCOUNT(Combined_Sales_Data_[Order_ID]),
+ SUM(Additional_Information[Add_to_Cart]) 
+) //  To understand how many orders did the product receive from a particular campaign.
+
+_______________________________________________________________________________________________________________________________________________
+
+3. Click-Through-% = 
+DIVIDE(
+    SUM(Additional_Information[Clicks]),
+    SUM(Additional_Information[Impression])
+) // How many customers really showed interest in the products after viewing it.
+
+_______________________________________________________________________________________________________________________________________________
+
+4. Conversion % = 
+DIVIDE(DISTINCTCOUNT(Combined_Sales_Data_[Order_ID]),SUM(Additional_Information[Clicks])) // Rate of sales made sale by the campaign
+
+________________________________________________________________________________________________________________________________________________
+
+5. Campaign Budget = 
+CALCULATE(
+SUM(Additional_Information[Budget]),
+CROSSFILTER(Additional_Information[Campaign],Campaign[Campaign],Both)
+)
+// How much is spent on campaign
+
+____________________________________________________________________________________________________________________________________________________
+
+6. Customer Aquisition Cost = 
+[Campaign Budget]/[Unit Sold] // Shows how the campaing the helps in acquiring customers
+____________________________________________________________________________________________________________________________________________________
+
+7. Total CPC = 
+DIVIDE([Campaign Budget],SUM(Additional_Information[Clicks])) // This shows how much has been spent on add, which determines the relevance of the campaign
+
+__________________________________________________________________________________________________________________________________________________________
+
+8. Return on Ad Spend% = 
+([Total Sales]/[Campaign Budget]) // Sales made by the campaign
+
+____________________________________________________________________________________________________________________________________________________________
+
+
