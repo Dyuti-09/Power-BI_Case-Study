@@ -24,3 +24,22 @@ TOTALYTD(
 
 Gross Margin % = 
 ([Total Sales]- [Cost Price])/[Total Sales]
+
+________________________________________________________________________________________________________________________________________________________________________
+========================================================================================================================================================================
+Value = SELECTEDMEASURE() // Values (Sales/ Cost/ Profit / Orders) for Selected Month
+
+CM Vs. Monthly Sales Coparison = 
+VAR LatestDate = CALCULATE(MAX(Combined_Sales_Data_[Sales Date]),ALL(Combined_Sales_Data_))
+VAR LatestMOnth = MONTH(LatestDate)
+Var LatestYear = Year(LatestDate)
+
+VAR LatestOrders = CALCULATE(
+  SELECTEDMEASURE(),
+   ALL(Calender),Calender[Month]= LatestMOnth,
+   Calender[Year]=LatestYear
+)
+VAR Varience = DIVIDE( SELECTEDMEASURE(),LatestOrders)
+
+RETURN Varience
+
